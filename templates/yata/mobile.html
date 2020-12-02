@@ -1,0 +1,132 @@
+{% comment %}
+Copyright 2019 kivou.2000607@gmail.com
+
+This file is part of yata.
+
+    yata is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    yata is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with yata. If not, see <https://www.gnu.org/licenses/>.
+{% endcomment %}
+
+<!DOCTYPE html>
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+{% load mathfilters %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!-- Current language: {{ LANGUAGE_CODE }} -->
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <!-- meta  -->
+    <meta charset="UTF-8">
+    <meta name="robots" content="NONE,NOARCHIVE" />
+
+{% if request.user_agent.is_mobile %}
+    <!-- mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+{% endif %}
+    <!-- perso -->
+    <link rel="stylesheet" type="text/css" href='{% static "admin/css/base.css" %}' />
+    <link rel="stylesheet" type="text/css" href='{% static "admin/css/forms.css" %}' />
+    <link rel="stylesheet" type="text/css" href='{% static "perso/css/base.css" %}' />
+
+    <!-- load fontawesome -->
+    <link href='{% static "thirdparty/fontawesome-free-5.13.0-web/css/all.css" %}' rel="stylesheet"> <!--load all styles -->
+    {# <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> #}
+
+    <!-- jquery -->
+    <script src='{% static "thirdparty/js/jquery-3.4.1.min.js" %}'></script>
+    <script src='{% static "thirdparty/jquery-ui-1.12.1/jquery-ui.min.js" %}'></script>
+    <link rel="stylesheet" type="text/css" href='{% static "thirdparty/jquery-ui-1.12.1/jquery-ui.min.css" %}'>
+
+    <!-- tooltips  -->
+    <link rel="stylesheet" type="text/css" href='{% static "thirdparty/css/tooltip.css" %}' />
+
+    <!-- tablesorter  -->
+    <script src={% static "thirdparty/js/jquery.tablesorter.js" %}></script>
+
+    <!-- google charts -->
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <!-- yata main js -->
+    <!-- Faction id: {{player.factionId}} -->
+    <!-- faction: {{player.getSpinner}} -->
+    {# {% if player.factionId|stringformat:"i" in '1' %} #}
+        {# <script src='{% static "perso/js/spinner-ban.js" %}'></script> #}
+    {# {% else %} #}
+        {# <script src='{% static "perso/js/spinner.js" %}'></script> #}
+    {# {% endif %} #}
+
+    {% if player %}
+        {% with 'perso/js/spinner'|add:player.getSpinner|add:'.js' as spinner %}
+            <script src='{% static spinner %}'></script>
+        {% endwith %}
+    {% else %}
+        <script src='{% static "perso/js/spinner.js" %}'></script>
+    {% endif %}
+    <script src='{% static "perso/js/yata.js" %}'></script>
+
+    <!-- local css -->
+    {% block css%}{% endblock %}
+    <!-- local js -->
+    {% block jquery %}{% endblock %}
+
+
+
+    <!-- favicon -->
+    <link rel="icon" type="image/png" href={% static "images/icon.png" %} />
+
+    <title>YATA{% block title%}{% endblock%}</title>
+    <!-- Material Config -->
+    <style>
+        :root {
+            --mdc-theme-primary:#202124;
+        }
+        .mdc-drawer .mdc-list-item--activated, .mdc-drawer .mdc-list-item--activated .mdc-list-item__graphic {
+          color:#447e9b;
+        }
+        .mdc-drawer .mdc-list-item, .mdc-drawer .mdc-list-item__graphic {
+          color:#505f66;
+        }
+    </style>
+</head>
+
+<body>
+{% if request.user_agent.is_mobile %}
+  {% block mobile %}{% endblock %}
+{% else %}
+    <div id="details"></div>
+
+    <div id="container">
+        <div id="content">
+            {# <h1><img src="{% static "logo/yata.full.svg" %}" alt="YATA - Yet Another Torn App"></h1> #}
+            {# <h1>{% include "svg/yata.full.svg" %}</h1> #}
+            {# <h1><b>YATA:</b> <b>Y</b>et <b>A</b>nother <b>T</b>orn <b>A</b>pp</a></h1> #}
+            <div id="yata-login">
+                {% include "yata/login.html" %}
+            </div>
+            {% include "yata/section-message.html" %}
+            {% include "yata/error.html" %}
+            {% block content %}{% endblock %}
+        </div> <!--end of content-->
+    </div> <!--end of container-->
+{% endif %}
+
+</body>
+
+</html>
+

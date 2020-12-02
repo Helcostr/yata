@@ -4,6 +4,12 @@ django-mathfilters==1.0.0
 requests==2.22.0
 django-json-widget==1.0.1
 
+# mobile detection
+pyyaml==5.3.1
+ua-parser==0.10.0
+user-agents==2.2.0
+django-user-agents==0.4.0
+
 # not needed for:
 # - development server (./manage.py runserver)
 # - sqlite3 database

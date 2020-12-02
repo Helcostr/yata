@@ -1,107 +1,99 @@
-{% comment %}
-Copyright 2019 kivou.2000607@gmail.com
-
-This file is part of yata.
-
-    yata is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    any later version.
-
-    yata is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with yata. If not, see <https://www.gnu.org/licenses/>.
-{% endcomment %}
-
-<!DOCTYPE html>
-{% load static %}
-{% load i18n %}
-{% load humanize %}
-{% load mathfilters %}
-{% get_current_language as LANGUAGE_CODE %}
-
-<!-- Current language: {{ LANGUAGE_CODE }} -->
-<html lang="{{ LANGUAGE_CODE }}">
-<head>
-    <!-- meta  -->
-    <meta charset="UTF-8">
-    <meta name="robots" content="NONE,NOARCHIVE" />
-
-    <!-- perso -->
-    <link rel="stylesheet" type="text/css" href='{% static "admin/css/base.css" %}' />
-    <link rel="stylesheet" type="text/css" href='{% static "admin/css/forms.css" %}' />
-    <link rel="stylesheet" type="text/css" href='{% static "perso/css/base.css" %}' />
-
-    <!-- load fontawesome -->
-    <link href='{% static "thirdparty/fontawesome-free-5.13.0-web/css/all.css" %}' rel="stylesheet"> <!--load all styles -->
-    {# <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> #}
-
-    <!-- jquery -->
-    <script src='{% static "thirdparty/js/jquery-3.4.1.min.js" %}'></script>
-    <script src='{% static "thirdparty/jquery-ui-1.12.1/jquery-ui.min.js" %}'></script>
-    <link rel="stylesheet" type="text/css" href='{% static "thirdparty/jquery-ui-1.12.1/jquery-ui.min.css" %}'>
-
-    <!-- tooltips  -->
-    <link rel="stylesheet" type="text/css" href='{% static "thirdparty/css/tooltip.css" %}' />
-
-    <!-- tablesorter  -->
-    <script src={% static "thirdparty/js/jquery.tablesorter.js" %}></script>
-
-    <!-- google charts -->
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-
-    <!-- yata main js -->
-    <!-- Faction id: {{player.factionId}} -->
-    <!-- faction: {{player.getSpinner}} -->
-    {# {% if player.factionId|stringformat:"i" in '1' %} #}
-        {# <script src='{% static "perso/js/spinner-ban.js" %}'></script> #}
-    {# {% else %} #}
-        {# <script src='{% static "perso/js/spinner.js" %}'></script> #}
-    {# {% endif %} #}
-
-    {% if player %}
-        {% with 'perso/js/spinner'|add:player.getSpinner|add:'.js' as spinner %}
-            <script src='{% static spinner %}'></script>
-        {% endwith %}
-    {% else %}
-        <script src='{% static "perso/js/spinner.js" %}'></script>
-    {% endif %}
-    <script src='{% static "perso/js/yata.js" %}'></script>
-
-    <!-- local css -->
-    {% block css%}{% endblock %}
-    <!-- local js -->
-    {% block jquery %}{% endblock %}
-
-
-
-    <!-- favicon -->
-    <link rel="icon" type="image/png" href={% static "images/icon.png" %} />
-
-    <title>YATA{% block title%}{% endblock%}</title>
-</head>
-
-<body>
-    <div id="details"></div>
-
+{% extends 'yata/mobile.html' %}
+{% block mobile %}
+  <style>
+    #container {
+      min-width: 100%;
+    }
+  </style>
+  <header id="app-bar" class="mdc-top-app-bar">
+    <div class="mdc-top-app-bar__row">
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button" aria-label="Open navigation menu">menu</button>
+        <span class="mdc-top-app-bar__title">YATA</span>
+      </section>
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+        <span style="padding-right:12px;">{{player.name}}</span>
+      </section>
+    </div>
+  </header>
+  <aside class="mdc-drawer mdc-drawer--modal mdc-top-app-bar--fixed-adjust">
+    <div class="mdc-drawer__header">
+      <h3 class="mdc-drawer__title">{{player.name}}</h3>
+      <h6 class="mdc-drawer__subtitle">{{player.tId}}</h6>
+    </div>
+    <div class="mdc-drawer__content">
+      <div class="mdc-list">
+        <a class="mdc-list-item mdc-list-item--activated" href="{% url 'index' %}" aria-current="page">
+          <span class="mdc-list-item__ripple"></span>
+          <i class="material-icons mdc-list-item__graphic fas fa-home" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Main</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'player:index' %}" aria-current="page">
+          <span class="mdc-list-item__ripple"></span>
+          <i class="material-icons mdc-list-item__graphic fas fa-address-card" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Player</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'bazaar:index' %}" aria-current="page">
+          <span class="mdc-list-item__ripple"></span>
+          <i class="material-icons mdc-list-item__graphic fas fa-store" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Bazaar</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'stock:index' %}">
+          <span class="mdc-list-item__ripple"></span>
+          <i class="material-icons mdc-list-item__graphic fas fa-chart-line" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Stocks</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'company:index' %}">
+          <span class="mdc-list-item__ripple"></span>
+          <i class="material-icons mdc-list-item__graphic fas fa-building" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Company</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'faction:index' %}">
+          <span class="mdc-list-item__ripple"></span>
+          <i class="material-icons mdc-list-item__graphic fas fa-fist-raised" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Faction</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'target:index' %}">
+          <span class="mdc-list-item__ripple"></span>
+          <i class="material-icons mdc-list-item__graphic fas fa-crosshairs" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Targets</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'awards:index' %}">
+          <span class="mdc-list-item__ripple"></span>
+          <i class="material-icons mdc-list-item__graphic fas fa-medal" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Awards</span>
+        </a>
+        <a class="mdc-list-item" href="{% url 'loot:index' %}">
+          <span class="mdc-list-item__ripple"></span>
+          <i class="material-icons mdc-list-item__graphic fas fa-user-secret" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Loot</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+  <div class="mdc-drawer-scrim"></div>
+  <div id="app" class="mdc-top-app-bar--fixed-adjust">
     <div id="container">
-        <div id="content">
-            {# <h1><img src="{% static "logo/yata.full.svg" %}" alt="YATA - Yet Another Torn App"></h1> #}
-            {# <h1>{% include "svg/yata.full.svg" %}</h1> #}
-            {# <h1><b>YATA:</b> <b>Y</b>et <b>A</b>nother <b>T</b>orn <b>A</b>pp</a></h1> #}
-            <div id="yata-login">
-                {% include "yata/login.html" %}
-            </div>
-            {% include "yata/section-message.html" %}
-            {% include "yata/error.html" %}
-
-            {% block content %}{% endblock %}
-
-        </div> <!--end of content-->
-    </div> <!--end of container-->
-</body>
-</html>
+      <div id="content">
+        {% include "yata/section-message.html" %}
+        {% include "yata/error.html" %}
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+  <script>
+    const drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+    const topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.getElementById('app-bar'));
+    //topAppBar.setScrollTarget(document.getElementById('container'));
+    topAppBar.listen('MDCTopAppBar:nav', () => {
+      drawer.open = !drawer.open;
+    });
+    var app = new Vue({
+      el: '#app',
+      delimiters: ['<%', '%>'],
+      data: {
+        page: "Test Page"
+      }
+    });
+  </script>
+{% endblock %}

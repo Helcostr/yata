@@ -34,6 +34,7 @@ print(f"SETTINGS: ALLOWED_HOSTS={ALLOWED_HOSTS}")
 # Application definition
 
 INSTALLED_APPS = [
+    'django_user_agents',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'player.apps.PlayerConfig',
@@ -60,6 +61,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_user_agents.middleware.UserAgentMiddleware',
     'django_brotli.middleware.BrotliMiddleware',
     'htmlmin.middleware.HtmlMinifyMiddleware',
     'django.middleware.security.SecurityMiddleware',
